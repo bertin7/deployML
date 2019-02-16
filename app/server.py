@@ -9,7 +9,7 @@ from fastai import *
 from fastai.vision import *
 
 model_file_url = 'https://storage.cloud.google.com/fastai-bucket1/stage-4.pth?hl=fr&_ga=2.105495875.-1995818455.1549859838'
-model_file_name = 'model'
+model_file_name = 'stage-4.pth'
 classes = ['cheetah', 'leopard', 'lion']
 path = Path(__file__).parent
 
