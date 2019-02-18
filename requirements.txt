@@ -1,8 +1,10 @@
 -f https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html
 torch_nightly
+murmurhash
 fastai
 starlette
 uvicorn
 python-multipart
 aiofiles
 aiohttp
+google-cloud-storage

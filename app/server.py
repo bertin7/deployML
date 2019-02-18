@@ -4,12 +4,13 @@ from starlette.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 import uvicorn, aiohttp, asyncio
 from io import BytesIO
+from google.cloud import storage
 
 from fastai import *
 from fastai.vision import *
 
 model_file_url = 'https://storage.cloud.google.com/fastai-bucket1/stage-4.pth?hl=fr&_ga=2.105495875.-1995818455.1549859838'
-model_file_name = 'stage-4.pth'
+model_file_name = 'model.pth'
 classes = ['cheetah', 'leopard', 'lion']
 path = Path(__file__).parent
 
@@ -25,11 +26,15 @@ async def download_file(url, dest):
             with open(dest, 'wb') as f: f.write(data)
 
 async def setup_learner():
-    await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
+    #await download_file(model_file_url, path/'models'/f'{model_file_name}.pth')
+    client = storage.Client()
+    bucket = client.get_bucket('fastai-bucket1')
+    blob = bucket.get_blob('stage-4.pth')
+    blob.download_to_filename(path/'models'/model_file_name)
     data_bunch = ImageDataBunch.single_from_classes(path, classes,
         ds_tfms=get_transforms(), size=224).normalize(imagenet_stats)
     learn = create_cnn(data_bunch, models.resnet34, pretrained=False)
-    learn.load(model_file_name)
+    learn.load("model")
     return learn
 
 loop = asyncio.get_event_loop()
